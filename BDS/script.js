@@ -68,5 +68,5 @@ function resetTest() {
   submitBtn.style.display = 'none';
   startBtn.style.display = 'inline';
   instruction.innerText = 'Press START to begin again';
-  currentSpan = 3;  // Reset the span if you want
+  currentSpan = 3;  // Reset span length if incorrect
 }
