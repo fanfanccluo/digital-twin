@@ -1,0 +1,27 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background: #f4f4f4;
+  padding: 30px;
+}
+
+#digitDisplay {
+  font-size: 72px;
+  margin: 20px;
+}
+
+#instruction, #feedback {
+  font-size: 24px;
+  margin: 20px;
+}
+
+#responseInput {
+  font-size: 24px;
+  padding: 10px;
+  margin: 20px;
+}
+
+#startBtn, #submitBtn {
+  font-size: 20px;
+  padding: 10px 20px;
+}
