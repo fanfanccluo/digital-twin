@@ -1,5 +1,3 @@
-# filename: sart_gpt.py
-
 from psychopy import visual, core, event, data, gui
 import random
 import os
@@ -16,7 +14,7 @@ instruction_size = 50
 feedback_size = 60
 end_text_size = 50
 probe_font_size = 50
-probe_interval = 20  # Show probe every 20 trials
+probe_interval = 20
 font_size_options = [48, 72, 94, 100, 120]
 
 # ===== Setup Experiment Info Dialog with PID validation =====
@@ -35,11 +33,8 @@ while True:
 
 # ===== Initialize Window =====
 win = visual.Window(
-    fullscr=True, color=[-1, -1, -1], units='pix', allowGUI=False
+    fullscr=True, color=[-1, -1, -1], units='norm', allowGUI=False
 )
-
-screen_width, screen_height = win.size
-calculated_wrapWidth = screen_width * 0.75
 
 exp_info['date'] = datetime.now().strftime('%Y-%m-%d')
 exp_info['time'] = datetime.now().strftime('%H:%M:%S')
@@ -47,7 +42,6 @@ exp_info['time'] = datetime.now().strftime('%H:%M:%S')
 # ===== Fixed Target Digit =====
 target_digit = 3
 exp_info['target_digit'] = target_digit
-instruction_image_path = 'sart_instructions.png'
 
 # ===== Setup Data File =====
 data_path = os.path.join(os.getcwd(), 'data')
@@ -60,14 +54,19 @@ exp_handler = data.ExperimentHandler(
 )
 
 # ===== Create Stimuli =====
-digit_stim = visual.TextStim(win=win, color=[1, 1, 1], height=digit_size, font='Arial')
-instruction_image = visual.ImageStim(win=win, image=instruction_image_path, size=win.size)
-fixation = visual.TextStim(win=win, text='+', color=[1, 1, 1], height=50)
-feedback_text = visual.TextStim(win=win, color=[1, 1, 1], height=feedback_size, wrapWidth=calculated_wrapWidth)
-end_text_stim = visual.TextStim(win=win, color='white', height=end_text_size, wrapWidth=calculated_wrapWidth, font='Arial')
-probe1_image = visual.ImageStim(win=win, image='sart_probe1.png', size=win.size)
-probe2_image = visual.ImageStim(win=win, image='sart_probe2.png', size=win.size)
-continue_image = visual.ImageStim(win=win, image='sart_continue.png', size=win.size)
+digit_stim = visual.TextStim(win=win, color=[1, 1, 1], height=0.25, font='Arial')
+fixation = visual.TextStim(win=win, text='+', color=[1, 1, 1], height=0.1)
+feedback_text = visual.TextStim(win=win, color=[1, 1, 1], height=0.15, wrapWidth=1.5)
+end_text_stim = visual.TextStim(win=win, color='white', height=0.1, wrapWidth=1.5, font='Arial')
+
+# ===== Helper to make full-screen images =====
+def full_screen_image(image_path):
+    return visual.ImageStim(win=win, image=image_path, size=(2, 2))
+
+instruction_image = full_screen_image('sart_instructions.png')
+probe1_image = full_screen_image('sart_probe1.png')
+probe2_image = full_screen_image('sart_probe2.png')
+continue_image = full_screen_image('sart_continue.png')
 
 # ===== Texts =====
 end_practice_text = f"""
@@ -90,7 +89,7 @@ Press SPACE to exit.
 
 # ===== Escape Key Handling =====
 def quit_save():
-    exp_handler.saveAsWideText(exp_handler.dataFileName + '.csv')
+    exp_handler.saveAsWideText(exp_handler.dataFileName)
     exp_handler.saveAsPickle(exp_handler.dataFileName)
     win.close()
     core.quit()
@@ -128,7 +127,6 @@ def run_block(num_trials, is_practice=False):
     random.shuffle(trial_digits)
 
     for trial_idx, current_digit in enumerate(trial_digits):
-        # Insert probes intermittently
         if not is_practice and trial_idx > 0 and trial_idx % probe_interval == 0:
             attention = show_probe(probe1_image)
             awareness = show_probe(probe2_image)
@@ -140,7 +138,7 @@ def run_block(num_trials, is_practice=False):
 
         response, rt = None, None
         digit_stim.setText(str(current_digit))
-        digit_stim.height = random.choice(font_size_options)
+        digit_stim.height = random.choice([0.2, 0.3, 0.4])
 
         fixation.draw()
         win.flip()
@@ -215,8 +213,7 @@ event.waitKeys(keyList=['space'])
 performance = run_block(n_trials)
 
 for key, value in performance.items():
-    exp_handler.addData(key, value)
-exp_handler.nextEntry()
+    exp_handler.addData(f'summary_{key}', value)
 
 end_text_stim.setText(end_text)
 end_text_stim.draw()
