@@ -26,10 +26,10 @@ while True:
     dlg = gui.DlgFromDict(dictionary=exp_info, title='SART Task')
     if not dlg.OK:
         core.quit()
-    if (len(exp_info['PID']) == 9 and exp_info['PID'][0].lower() == 'a' and exp_info['PID'][1:].isdigit()):
+    if exp_info['Email'].strip() and '@' in exp_info['Email']:
         break
     else:
-        print("Error: Please enter a valid PID.")
+        print("Error: Please enter a valid email address to start.")
 
 # ===== Initialize Window =====
 win = visual.Window(
