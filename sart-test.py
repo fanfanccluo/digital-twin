@@ -20,7 +20,7 @@ font_size_options = [48, 72, 94, 100, 120]
 # ===== Setup Experiment Info Dialog with PID validation =====
 while True:
     exp_info = {
-        'PID': '',
+        'Email': '',
         'session': ['1', '2', '3', '4', '5', '6'],
     }
     dlg = gui.DlgFromDict(dictionary=exp_info, title='SART Task')
@@ -46,7 +46,7 @@ exp_info['target_digit'] = target_digit
 # ===== Setup Data File =====
 data_path = os.path.join(os.getcwd(), 'data')
 os.makedirs(data_path, exist_ok=True)
-file_name = f"SART_{exp_info['PID']}_{exp_info['session']}_{exp_info['date']}"
+file_name = f"SART_{exp_info['Email']}_{exp_info['session']}_{exp_info['date']}"
 exp_handler = data.ExperimentHandler(
     name='SART',
     extraInfo=exp_info,
