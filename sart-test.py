@@ -203,12 +203,13 @@ instruction_image.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
-run_block(practice_trials, is_practice=True)
+if exp_info['session'] == '1':
+    run_block(practice_trials, is_practice=True)
 
-end_text_stim.setText(end_practice_text)
-end_text_stim.draw()
-win.flip()
-event.waitKeys(keyList=['space'])
+    end_text_stim.setText(end_practice_text)
+    end_text_stim.draw()
+    win.flip()
+    event.waitKeys(keyList=['space'])
 
 performance = run_block(n_trials)
 
