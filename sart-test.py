@@ -63,10 +63,14 @@ end_text_stim = visual.TextStim(win=win, color='white', height=0.1, wrapWidth=1.
 def full_screen_image(image_path):
     return visual.ImageStim(win=win, image=image_path, size=(2, 2))
 
-instruction_image = full_screen_image('sart_instructions.png')
+# Choose instruction image based on session
+instruction_image_path = 'sart_instructions.png' if exp_info['session'] == '1' else 'instruct2-6.png'
+
+instruction_image = full_screen_image(instruction_image_path)
 probe1_image = full_screen_image('sart_probe1.png')
 probe2_image = full_screen_image('sart_probe2.png')
 continue_image = full_screen_image('sart_continue.png')
+no_practice_image = full_screen_image('no_practice.png')
 
 # ===== Texts =====
 end_practice_text = f"""
@@ -208,6 +212,10 @@ if exp_info['session'] == '1':
 
     end_text_stim.setText(end_practice_text)
     end_text_stim.draw()
+    win.flip()
+    event.waitKeys(keyList=['space'])
+else:
+    no_practice_image.draw()
     win.flip()
     event.waitKeys(keyList=['space'])
 
